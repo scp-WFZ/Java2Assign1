@@ -1,5 +1,6 @@
 import java.io.IOException;
-import java.nio.file.*;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -8,32 +9,33 @@ public class MovieAnalyzer {
 
     public List<Movie> movies = new ArrayList<>();
 
+
     public MovieAnalyzer(String dataset_path) throws IOException {
         Stream<String> lines = Files.lines(Paths.get(dataset_path));
         lines.forEach(line -> {
             String[] strings = line.split(",(?=(?:[^\"]*\"[^\"]*\")*[^\"]*$)", -1);;
             if (!Objects.equals(strings[0], "Poster_Link")) {
                 String Series_Title = (Objects.equals(strings[1],""))? null : strings[1].replaceAll("\"", "");
-                int Released_Year = (Objects.equals(strings[2],""))? -1 : Integer.parseInt(strings[2]);
-                String Certificate = (Objects.equals(strings[3],""))? null : strings[3];
-                int Runtime = (Objects.equals(strings[4],""))? -1 : Integer.parseInt(strings[4].replaceAll("min","").trim());
-                ArrayList<String> Genre = (Objects.equals(strings[5],""))? null :
+                int Released_Year = (Objects.equals(strings[2], ""))? -1 : Integer.parseInt(strings[2]);
+                String Certificate = (Objects.equals(strings[3], ""))? null : strings[3];
+                int Runtime = (Objects.equals(strings[4], ""))? -1 : Integer.parseInt(strings[4].replaceAll("min","").trim());
+                ArrayList<String> Genre = (Objects.equals(strings[5], ""))? null :
                         new ArrayList<>(List.of(strings[5].replaceAll("\"", "").replaceAll(" ", "").split(",")));
                 float IMDB_Rating = (Objects.equals(strings[6],""))? -1 : Float.parseFloat(strings[6]);
-                if(!Objects.equals(strings[7],"")){
+                if(!Objects.equals(strings[7], "")){
                     if(strings[7].startsWith("\"") && strings[7].endsWith("\"")){
                         strings[7] = strings[7].substring(1,strings[7].length()-1);
                     }
                 }
                 String Overview = (strings[7].equals(""))? null: strings[7];
-                Long Meta_score = (Objects.equals(strings[8],""))? null : Long.parseLong(strings[8]);
-                String Director = (Objects.equals(strings[9],""))? null : strings[9];
-                String Star1 = (Objects.equals(strings[10],""))? null : strings[10];
-                String Star2 = (Objects.equals(strings[11],""))? null : strings[11];
-                String Star3 = (Objects.equals(strings[12],""))? null : strings[12];
-                String Star4 = (Objects.equals(strings[13],""))? null : strings[13];
-                Long Noofvotes = (Objects.equals(strings[14],""))? null : Long.parseLong(strings[14]);
-                Long Gross = (Objects.equals(strings[15],""))? null : Long.parseLong(strings[15].replaceAll(",","").replaceAll("\"", ""));
+                Long Meta_score = (Objects.equals(strings[8], ""))? null : Long.parseLong(strings[8]);
+                String Director = (Objects.equals(strings[9], ""))? null : strings[9];
+                String Star1 = (Objects.equals(strings[10], ""))? null : strings[10];
+                String Star2 = (Objects.equals(strings[11], ""))? null : strings[11];
+                String Star3 = (Objects.equals(strings[12], ""))? null : strings[12];
+                String Star4 = (Objects.equals(strings[13], ""))? null : strings[13];
+                Long Noofvotes = (Objects.equals(strings[14], ""))? null : Long.parseLong(strings[14]);
+                Long Gross = (Objects.equals(strings[15], ""))? null : Long.parseLong(strings[15].replaceAll(",","").replaceAll("\"", ""));
                 movies.add(new Movie(Series_Title, Released_Year, Certificate, Runtime, Genre, IMDB_Rating, Overview,
                         Meta_score, Director, Star1, Star2, Star3, Star4, Noofvotes, Gross));
             }
