@@ -72,7 +72,20 @@ public class MovieAnalyzer {
     }
 
     public Map<List<String>, Integer> getCoStarCount() {
-        return null;
+        Map<List<String>, Integer> res = new HashMap<>();
+        List<List<String>> coStars = new ArrayList<>();
+        this.movies.forEach(movie -> {
+            coStars.add(Arrays.asList(movie.getStar1(), movie.getStar2()));
+            coStars.add(Arrays.asList(movie.getStar1(), movie.getStar3()));
+            coStars.add(Arrays.asList(movie.getStar1(), movie.getStar4()));
+            coStars.add(Arrays.asList(movie.getStar2(), movie.getStar3()));
+            coStars.add(Arrays.asList(movie.getStar2(), movie.getStar4()));
+            coStars.add(Arrays.asList(movie.getStar3(), movie.getStar4()));
+        });
+        coStars.stream().collect(Collectors.groupingBy(o -> o.stream().sorted().toList(), Collectors.counting()))
+                .entrySet().stream()
+                .forEach(listLongEntry -> res.put(listLongEntry.getKey(), listLongEntry.getValue().intValue()));
+        return res;
     }
 
     public List<String> getTopMovies(int top_k, String by) {
@@ -289,6 +302,9 @@ public class MovieAnalyzer {
         public Long getGross() {
             return gross;
         }
+    }
+
+    public static void main(String[] args) {
     }
 
 }
